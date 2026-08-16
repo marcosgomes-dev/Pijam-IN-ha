@@ -1,6 +1,8 @@
 # Pijam{IN}ha
 
-SEJA BEM VINDO(A)! PROJETO DESENVOLVIDO POR:
+E-commerce de pijamas com carrinho, favoritos, cadastro/login e checkout, dividido em um monorepo com backend (API) e frontend (SPA) separados.
+
+Projeto desenvolvido por:
 
 - ANA LUIZA CUNHA
 - GABRIEL TRINDADE
@@ -9,8 +11,6 @@ SEJA BEM VINDO(A)! PROJETO DESENVOLVIDO POR:
 - ARTHUR MOTA
 - ESTHER FREIXO
 - GABRIEL BAETA
-
-E-commerce de pijamas com carrinho, favoritos, cadastro/login e checkout, dividido em um monorepo com backend (API) e frontend (SPA) separados.
 
 ## Estrutura do projeto
 
