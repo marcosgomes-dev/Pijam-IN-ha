@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styles from "./styles.module.css";
 import { useEstrela } from "../../hooks/useEstrela";
 import axios from "axios";
+import { API_URL } from "../../config/api";
 import estrelaCheia from "../../assets/icons/estrelacheia.png";
 import estrelaVazia from "../../assets/icons/estrelavazia.png";
 import estrelaMeia from "../../assets/icons/estrelabrancametade.png";
@@ -22,7 +23,7 @@ export default function Feedback() {
 
     try {
       setLoading(true);
-      await axios.post("http://localhost:3333/feedbacks", {
+      await axios.post(`${API_URL}/feedbacks`, {
         name,
         description,
         rating,

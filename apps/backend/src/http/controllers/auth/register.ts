@@ -2,6 +2,7 @@ import type { FastifyRequest, FastifyReply } from 'fastify'
 import { z } from 'zod'
 import { PrismaUsersRepository } from '../../../repositories/prisma/prisma-users-repository.ts'
 import { RegisterUseCase } from '../../../use-cases/users/register-user-use-case.ts'
+import { UserAlreadyExists } from '../../../errors/user-already-exists-error.ts'
 
 export async function registerController(request: FastifyRequest, reply: FastifyReply) {
   const registerBodySchema = z.object({
@@ -26,6 +27,10 @@ export async function registerController(request: FastifyRequest, reply: Fastify
 
     return reply.status(201).send({ message: 'Usuário registrado com sucesso' })
   } catch (err) {
-    return reply.status(400).send({ message: 'Erro ao registrar usuário', err })
+    if (err instanceof UserAlreadyExists) {
+      return reply.status(409).send({ message: 'E-mail ou nome de usuário já está em uso' })
+    }
+
+    return reply.status(400).send({ message: 'Erro ao registrar usuário' })
   }
 }

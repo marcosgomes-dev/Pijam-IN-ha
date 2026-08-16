@@ -1,4 +1,3 @@
-import { PrismaClient } from '@prisma/client';
 import fastify from 'fastify';
 import { userRoutes } from './http/controllers/users/routes.ts';
 import { salesRoutes } from './http/controllers/sales/routes.ts';
@@ -13,7 +12,6 @@ import fastifySwaggerUi from '@fastify/swagger-ui';
 import { pijamaRoutes } from './http/controllers/pajamas/routes.ts';
 
 export const app = fastify();
-export const prisma = new PrismaClient();
 
 app.register(fastifyCors, {
   origin: true,

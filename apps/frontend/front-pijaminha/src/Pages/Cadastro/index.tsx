@@ -4,6 +4,7 @@ import { z } from 'zod';
 import styles from "./styles.module.css";
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../../config/api';
 
 const cadastroSchema = z.object({
   nome: z.string().nonempty('O nome não pode ser vazio')
@@ -39,7 +40,7 @@ export default function Cadastro() {
 
     async function handleRegister(data: CadastroData) {
         try {
-            const response = await axios.post('http://localhost:3333/auth/register', {
+            const response = await axios.post(`${API_URL}/auth/register`, {
                 name: data.nome,
                 username: data.usuario,
                 email: data.email,

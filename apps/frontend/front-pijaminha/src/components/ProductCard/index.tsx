@@ -5,6 +5,8 @@ import favoriteIcon from "../../assets/icons/coracaoOff.png";
 import favoritedIcon from "../../assets/icons/coracaoOn.png";
 import descontoIcon from "../../assets/icons/desconto.png";
 import type { Pijama } from "../../Types/Pijama";
+import { API_URL } from "../../config/api";
+import { usePijamasContext } from "../../hooks/usePijamasContext";
 
 interface ProductCardProps {
   pijama: Pijama;
@@ -14,6 +16,7 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = ({ pijama }) => {
   const navigate = useNavigate();
+  const { setPijamas } = usePijamasContext();
   const { id, name, image, price, on_sale, sale_percent, favorite } = pijama;
 
   const priceOnSale = price * ((100 - (sale_percent ?? 0)) / 100);
@@ -30,7 +33,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ pijama }) => {
     e.stopPropagation();
     try {
       const response = await fetch(
-        `http://localhost:3333/pajamas/${pijama.id}/favorite`,
+        `${API_URL}/pijamas/${pijama.id}/favorite`,
         {
           method: "PATCH",
         }
@@ -38,7 +41,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ pijama }) => {
       if (response.ok) {
         const data = await response.json();
         setIsFavorited(data.pajama.favorite);
-        console.log("funcionou");
+        setPijamas((prev) =>
+          prev.map((p) =>
+            p.id === pijama.id ? { ...p, favorite: data.pajama.favorite } : p
+          )
+        );
       } else {
         alert("Erro ao atualizar favorito");
       }

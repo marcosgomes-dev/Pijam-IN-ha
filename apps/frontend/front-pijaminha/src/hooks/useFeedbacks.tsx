@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import type { Feedback } from "../Types/Feedback";
 import axios from "axios";
+import { API_URL } from "../config/api";
 
 interface FectchFeedbacks {
   feedbacks: Feedback[];
@@ -9,7 +10,7 @@ interface FectchFeedbacks {
 export function useFeedbacks() {
 
   const [feedbacks, setFeedbacks] = useState<FectchFeedbacks>();
-  const url = "http://localhost:3333/feedbacks";
+  const url = `${API_URL}/feedbacks`;
 
   useEffect(() => {
     axios

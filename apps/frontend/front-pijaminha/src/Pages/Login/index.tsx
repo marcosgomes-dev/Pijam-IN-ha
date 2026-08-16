@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import styles from "./styles.module.css";
 import olho from "../../assets/icons/olhosenha.png";
@@ -6,6 +6,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import axios from 'axios';
+import { API_URL } from '../../config/api';
 
 const userSchema = z.object({
   emailOrUsuario: z.string().nonempty('O e-mail ou usuário não pode ser vazio'),
@@ -28,12 +29,12 @@ export default function Login() {
 
   async function handleLogin(data: User) {
     try {
-      const response = await axios.post('http://localhost:3333/auth/login', {
+      const response = await axios.post(`${API_URL}/auth/login`, {
         identifier: data.emailOrUsuario,
         password: data.password,
       });
 
-      console.log('Login bem-sucedido!', response.data);
+      localStorage.setItem('token', response.data.token);
 
       navigate('/');
     } catch (error) {

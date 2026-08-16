@@ -1,11 +1,11 @@
 export interface PijamaSize {
-  pajama_id: number;
+  pajama_id: string;
   size: string;
   stock_quantity: number;
 }
 
 export interface Pijama {
-  id: number;
+  id: string;
   name: string;
   description: string;
   image: string;

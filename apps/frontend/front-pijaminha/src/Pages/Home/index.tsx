@@ -1,8 +1,8 @@
 import { Link } from "react-router-dom";
 import styles from "./styles.module.css";
-import banner1 from "../../assets/banners/bannerNatal.png";
-import banner2 from "../../assets/banners/bannerValentines.png";
-import banner3 from "../../assets/banners/bannerGrupo.png";
+import banner1 from "../../assets/banners/bannerNatal.webp";
+import banner2 from "../../assets/banners/bannerValentines.webp";
+import banner3 from "../../assets/banners/bannerGrupo.webp";
 import logo1 from "../../assets/logo/logoazul.png";
 import Carrossel from "../../components/CarrosselComp";
 import CaixaFeedback from "../../components/CaixaFeedback";

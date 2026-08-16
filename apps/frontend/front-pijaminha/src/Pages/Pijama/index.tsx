@@ -11,6 +11,7 @@ import { usePijamasContext } from "../../hooks/usePijamasContext";
 import { useParams } from "react-router-dom";
 import { useCart } from "../../stores/carrinhoContext";
 import { useNavigate } from "react-router-dom";
+import { API_URL } from "../../config/api";
 import verao from "../../assets/icons/verao.png";
 import feminino from "../../assets/icons/feminino.png";
 import ambos from "../../assets/icons/ambos.png";
@@ -19,7 +20,7 @@ import familia from "../../assets/icons/familia.png";
 import masculino from "../../assets/icons/masculino.png";
 
 export default function Pijama() {
-  const { pijamas } = usePijamasContext();
+  const { pijamas, setPijamas } = usePijamasContext();
   const { pijamaId } = useParams();
   const [selectedSize, setSelectedSize] = useState<Size | null>(null);
   const [selectedStock, setSelectedStock] = useState<number | null>(null);
@@ -37,7 +38,7 @@ export default function Pijama() {
   const handleFavoriteClick = async () => {
     try {
       const response = await fetch(
-        `http://localhost:3333/pajamas/${pijama.id}/favorite`,
+        `${API_URL}/pijamas/${pijama.id}/favorite`,
         {
           method: "PATCH",
         }
@@ -45,8 +46,11 @@ export default function Pijama() {
       if (response.ok) {
         const data = await response.json();
         setIsFavorited(data.pajama.favorite);
-        const favoritos = pijamas.filter((pijama) => pijama.favorite === true);
-        console.log(favoritos);
+        setPijamas((prev) =>
+          prev.map((p) =>
+            p.id === pijama.id ? { ...p, favorite: data.pajama.favorite } : p
+          )
+        );
       } else {
         alert("Erro ao atualizar favorito");
       }

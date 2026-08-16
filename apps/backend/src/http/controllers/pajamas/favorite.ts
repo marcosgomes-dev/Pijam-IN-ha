@@ -10,10 +10,10 @@ export async function favorite(
 ) {
 
   const toggleFavoriteParamsSchema = z.object({
-    pajamaId: z.string().uuid(),
+    pijamaId: z.string().uuid(),
   })
 
-  const { pajamaId } = toggleFavoriteParamsSchema.parse(request.params)
+  const { pijamaId: pajamaId } = toggleFavoriteParamsSchema.parse(request.params)
 
   try {
 

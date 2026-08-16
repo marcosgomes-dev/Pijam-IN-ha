@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useCart } from "../../stores/carrinhoContext";
 import style from "./styles.module.css";
+import { API_URL } from "../../config/api";
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -72,13 +73,13 @@ export default function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         price: item.price,
       }));
 
-      await axios.post("http://localhost:3333/sales", {
+      await axios.post(`${API_URL}/sales`, {
         buyer_name: form.buyer_name,
         cpf: form.cpf,
         price: finalPrice,
         payment_method: form.payment_method,
         installments:
-          form.payment_method === "credit_card" ? form.installments : 1,
+          form.payment_method === "credit_card" ? Number(form.installments) : 1,
         card_number:
           form.payment_method === "credit_card" ? form.card_number : null,
         address: {

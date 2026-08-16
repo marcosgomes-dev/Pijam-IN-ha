@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import type { Pijama } from "../Types/Pijama";
 import axios from "axios";
+import { API_URL } from "../config/api";
 
 export function usePijamas() {
   const [pijamas, setPijamas] = useState<Pijama[]>([]);
 
-  const url = "http://localhost:3333/pijamas";
+  const url = `${API_URL}/pijamas`;
   useEffect(() => {
     axios
       .get(url)
@@ -16,5 +17,5 @@ export function usePijamas() {
       })
       .catch((error) => console.error("Algo deu errado: " + error));
   }, []);
-  return { pijamas };
+  return { pijamas, setPijamas };
 }

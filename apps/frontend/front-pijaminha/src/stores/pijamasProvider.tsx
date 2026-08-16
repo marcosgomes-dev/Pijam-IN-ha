@@ -3,9 +3,9 @@ import { usePijamas } from "../hooks/usePijamas";
 import { PijamasContext } from "./pijamasContext";
 
 export function PijamasProvider({ children }: { children: ReactNode }) {
-  const { pijamas } = usePijamas();
+  const { pijamas, setPijamas } = usePijamas();
   return (
-    <PijamasContext.Provider value={{ pijamas }}>
+    <PijamasContext.Provider value={{ pijamas, setPijamas }}>
       {children}
     </PijamasContext.Provider>
   );

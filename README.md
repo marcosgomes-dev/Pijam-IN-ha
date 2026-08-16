@@ -1,73 +1,109 @@
-Pijaminha API
+# Pijam{IN}ha
 
-Bem-vindo à **Pijaminha API**, um sistema backend desenvolvido com **Fastify** e **Prisma** para gerenciar vendas, produtos (pijamas), usuários e feedbacks. Este projeto foi criado para fornecer uma API robusta e escalável, com autenticação JWT e documentação interativa via Swagger.
+SEJA BEM VINDO(A)! NOSSO GRUPO 3 É FORMADO PELOS INTEGRANTES:
 
-## 🚀 Funcionalidades
+- ANA LUIZA CUNHA
+- GABRIEL TRINDADE
+- MARCOS VINICIUS COSTA
+- DAVI TAVARES
+- ARTHUR MOTA
+- ESTHER FREIXO
+- GABRIEL BAETA
 
-- **Autenticação de Usuários**: Login e registro com suporte a JWT.
-- **Gerenciamento de Produtos**: Cadastro, listagem e atualização de pijamas.
-- **Registro de Vendas**: Controle de vendas realizadas.
-- **Feedbacks**: Coleta e gerenciamento de feedbacks dos usuários.
-- **Documentação Interativa**: Disponível em `/docs` via Swagger.
-- **Tratamento de Erros**: Validação de dados com Zod.
+E-commerce de pijamas com carrinho, favoritos, cadastro/login e checkout, dividido em um monorepo com backend (API) e frontend (SPA) separados.
 
-## 🛠️ Tecnologias Utilizadas
+## Estrutura do projeto
 
-- **Fastify**: Framework web rápido e eficiente.
-- **Prisma**: ORM para comunicação com o banco de dados.
-- **Zod**: Validação de dados.
-- **Swagger**: Documentação interativa da API.
-- **JWT**: Autenticação segura.
-- **CORS**: Configurado para permitir conexões de diferentes origens.
+```
+Pijam-IN-ha/
+├── apps/
+│   ├── backend/                 # API REST (Fastify + Prisma)
+│   └── frontend/
+│       └── front-pijaminha/     # SPA (React + Vite)
+└── package.json                 # scripts de conveniência da raiz
+```
 
-## 📚 Documentação da API
+## Tecnologias
 
-Acesse a documentação interativa da API em:  
-`http://localhost:3333/docs`
+**Backend:** Fastify, Prisma ORM (SQLite), Zod, JWT (`@fastify/jwt`), bcryptjs, Swagger/OpenAPI, TypeScript.
+Organizado no padrão *controllers → use-cases → repositories*, com repositórios com interface (`UsersRepository`, `PajamasRepository`, etc.) implementados via Prisma, o que facilita trocar de banco ou criar implementações em memória para testes.
 
-## ⚙️ Configuração do Ambiente
+**Frontend:** React 19, Vite, React Router, React Hook Form + Zod (validação de formulários), Axios, CSS Modules.
 
-1. Clone o repositório:
-   ```bash
-   git clone https://github.com/seu-usuario/pijaminha-api.git
-   cd pijaminha-api
-   ```
+## Pré-requisitos
 
-2. Instale as dependências:
-   ```bash
-   npm install
-   ```
+- Node.js 18+
+- npm
 
-3. Configure as variáveis de ambiente:
-   Crie um arquivo `.env` na raiz do projeto e adicione as seguintes variáveis:
-   ```env
-   PORT=3333
-   JWT_SECRET=sua_chave_secreta
-   DATABASE_URL=sua_url_do_banco_de_dados
-   ```
+## Como rodar
 
-4. Execute as migrações do banco de dados:
-   ```bash
-   npx prisma migrate dev
-   ```
+### Opção rápida (a partir da raiz do monorepo)
 
-5. Inicie o servidor:
-   ```bash
-   npm run dev
-   ```
+```bash
+npm run start
+```
 
-## 🧪 Testando a API
+Isso instala as dependências, roda a migração do banco (`prisma migrate reset`) e sobe o backend e o frontend juntos (via `concurrently`).
 
-- Acesse o frontend em `http://localhost:5174` (se configurado).
-- Teste as rotas diretamente no Swagger em `http://localhost:3333/docs`.
+### Rodando cada app separadamente
 
-## 👥 Integrantes
+**Backend** (`apps/backend`):
 
-- **Ana Luiza Cunha**
-- **Gabriel Trindade**
-- **Marcos Vinicius Costa**
-- **Davi Tavares**
-- **Arthur Mota**
-- **Esther Freixo**
-- **Gabriel Baeta**
+```bash
+cd apps/backend
+npm install
+npx prisma migrate dev      # cria/atualiza o banco SQLite local
+npx prisma db seed          # opcional: popula o banco com dados de exemplo
+npm run dev                 # sobe em http://localhost:3333
+```
 
+**Frontend** (`apps/frontend/front-pijaminha`):
+
+```bash
+cd apps/frontend/front-pijaminha
+npm install
+npm run dev                 # sobe em http://localhost:5173 (padrão do Vite)
+```
+
+A URL da API usada pelo frontend fica centralizada em `src/config/api.ts`.
+
+### Variáveis de ambiente do backend (`apps/backend/.env`)
+
+```
+NODE_ENV=dev
+PORT=3333
+JWT_SECRET=<sua-chave-secreta>
+DATABASE_URL="file:./dev.db"
+```
+
+> O `.env` não deve ser versionado (já está no `.gitignore`). Se você tiver clonado o repositório antes dessa correção, troque a `JWT_SECRET` e a senha do banco, pois podem ter ficado expostas no histórico do Git.
+
+## Rotas da API
+
+| Método | Rota                              | Auth | Descrição                          |
+|--------|------------------------------------|------|-------------------------------------|
+| POST   | `/auth/register`                   | -    | Cria uma conta (409 se e-mail/usuário já existir) |
+| POST   | `/auth/login`                      | -    | Autentica e retorna um JWT          |
+| GET    | `/pijamas`                         | -    | Lista os pijamas                    |
+| GET    | `/pijamas/:pijamaId`               | -    | Detalhe de um pijama                |
+| POST   | `/pijamas`                         | JWT  | Cria um pijama                      |
+| PATCH  | `/pijamas/:pijamaId/stock`         | JWT  | Atualiza o estoque                  |
+| DELETE | `/pijamas/:pijamaId`               | JWT  | Remove um pijama                    |
+| PATCH  | `/pijamas/:pijamaId/favorite`      | -    | Alterna favorito                    |
+| POST   | `/sales`                           | -    | Registra uma compra (checkout, sem login) |
+| GET    | `/sales` / `/sales/:saleId`        | JWT  | Lista/detalha vendas (dados sensíveis de comprador) |
+| PUT    | `/sales/:saleId`                   | JWT  | Atualiza uma venda                  |
+| DELETE | `/sales/:saleId`                   | JWT  | Remove uma venda                    |
+| GET    | `/users`                           | JWT  | Lista usuários                      |
+| PATCH  | `/users/:userId`                   | JWT  | Atualiza um usuário                 |
+| DELETE | `/users/:userId`                   | JWT  | Remove um usuário                   |
+| POST   | `/feedbacks`                       | -    | Envia um feedback                   |
+| GET    | `/feedbacks`                       | -    | Lista feedbacks                     |
+| DELETE | `/feedbacks/:feedbackId`           | JWT  | Remove um feedback                  |
+
+Documentação interativa (Swagger) disponível em `http://localhost:3333/docs` com o backend rodando.
+
+## Notas / pontos de atenção conhecidos
+
+- O checkout (`POST /sales`) continua sem exigir login, já que o modelo `Sale` hoje não vincula a venda a um usuário (`userId`) — é uma compra de convidado. Se isso mudar, vale linkar a venda ao usuário autenticado.
+- Se você clonou o repositório antes do `.env` ser removido do versionamento, rotacione a `JWT_SECRET` e a senha do banco de dados.

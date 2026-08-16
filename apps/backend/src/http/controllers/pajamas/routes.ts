@@ -17,5 +17,5 @@ export async function pijamaRoutes(app: FastifyInstance) {
     updateStock
   );
   app.delete("/pijamas/:pijamaId", { onRequest: [verifyJWT] }, remove);
-  app.patch("/pajamas/:pajamaId/favorite", favorite);
+  app.patch("/pijamas/:pijamaId/favorite", favorite);
 }
